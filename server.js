@@ -1,16 +1,20 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs')
 
+const cors = require('cors')
 const app = express();
 
 app.use(express.json()); 
 // 원래는 body-parser라는 별개의 패키지였으나 express와 통합됨
+
+app.use(cors())
 
 const database = {
     users: [
         {
             id: '123',
             name: 'peko',
+            password: "miko",
             email: 'peko@gmail.com',
             entries: 0,
             joined: new Date()
@@ -18,6 +22,7 @@ const database = {
         {
             id: '456',
             name: 'houshou',
+            password: "marine",
             email: 'houshou@gmail.com',
             entries: 0,
             joined: new Date()
@@ -54,15 +59,16 @@ app.post('/signin', (req, res) => {
     let signinSuccess = false
     const { email, password } = req.body
 
-    database.users.forEach((user) => {
+    database.users.forEach((user, i) => {
         if (email === user.email && password === user.password) {
             signinSuccess = true
-            return res.json('로그인 성공')
-        }
-        if (!signinSuccess) {
-            return res.status(400).json('로그인 실패')
+            res.json(database.users[i])
         }
     })
+        if (!signinSuccess) {
+            res.status(400).json('로그인 실패')
+        }
+    
 
     // if (req.body.email === database.users[1].email &&
     //     req.body.password === database.users[1].password ) {
@@ -72,23 +78,22 @@ app.post('/signin', (req, res) => {
     // }
 
     // db와 대조하여 맞으면 로그인 아니면 거부?
-})
+});
 
 app.post('/register', (req, res) => {
-    const { email, name, password} = req.body
 
+    const { email, name, password} = req.body
     
     database.users.push(
         {
             id: '124',
             name: name,
             email: email,
-            password: password,
             entries: 0,
             joined: new Date()
         }
     )
-    res.json(`Welcome ${database.users[database.users.length-1].name}!`)
+    res.json(database.users[database.users.length - 1])
 })
     
 
