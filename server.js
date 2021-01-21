@@ -25,7 +25,7 @@ const db = knex({
 
 
 app.use(express.json()); 
-app.use(cors())
+app.use(cors());
 
 
 // signin과 register는 post요청(CRUD의 create)
