@@ -1,11 +1,12 @@
 const Clarifai = require('clarifai');
 
-const app = new Clarifai.App({
+const api = new Clarifai.App({
     apiKey: 'c9f7a09b371a4b52b7980905d777c44b'
 })
 
 const handleApi = (req, res) => {
-    app.models.predict('d02b4508df58432fbb84e800597b8959', req.body.imgUrl)
+    api.models.predict('d02b4508df58432fbb84e800597b8959', req.body.imgUrl)
+    .then(api.models.predict('d02b4508df58432fbb84e800597b8959', req.body.imgUrl))
     .then(result => {
         res.json(result)
     })
