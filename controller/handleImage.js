@@ -6,7 +6,8 @@ const api = new Clarifai.App({
 
 const handleApi = (req, res) => {
     api.models.predict('d02b4508df58432fbb84e800597b8959', req.body.imgUrl)
-    .then(api.models.predict('d02b4508df58432fbb84e800597b8959', req.body.imgUrl))
+    
+    api.models.predict('d02b4508df58432fbb84e800597b8959', req.body.imgUrl)
     .then(result => {
         res.json(result)
     })
