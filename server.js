@@ -12,6 +12,8 @@ const register = require('./controller/handleRegister')
 const image = require('./controller/handleImage')
 const profile = require('./controller/handleProfile')
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
+
 app.use(cors());
 app.use(express.json()); 
 
