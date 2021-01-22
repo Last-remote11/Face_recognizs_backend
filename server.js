@@ -12,20 +12,16 @@ const register = require('./controller/handleRegister')
 const image = require('./controller/handleImage')
 const profile = require('./controller/handleProfile')
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
+app.use(cors());
+app.use(express.json()); 
 
 const db = knex({
-    client: 'pg',
-    connection: {
-      connectionString : process.env.DATABASE_URL,
-      ssl : true
-    }
-  });
-
-
-
-app.use(express.json()); 
-app.use(cors());
+  client: 'pg',
+  connection: {
+    connectionString : process.env.DATABASE_URL,
+    ssl : true
+  }
+});
 
 
 // signin과 register는 post요청(CRUD의 create)
@@ -41,6 +37,6 @@ app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 
 app.post('/submit', (req, res) => { image.handleApi(req, res) })
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT, () => {
     console.log(`it is running on port ${process.env.PORT}`)
 })
