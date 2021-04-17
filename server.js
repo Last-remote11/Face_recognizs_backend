@@ -1,12 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
-
 const cors = require('cors');
 const app = express();
-
 const knex = require('knex');
 const { response } = require('express');
 const morgan = require('morgan')
+const redis = require('redis')
+const redisClient = redis.createClient({host : 'redis'})
 
 const signIn = require('./controller/handleSignIn')
 const register = require('./controller/handleRegister')
@@ -29,12 +29,10 @@ const db = knex({
   }
 });
 
-console.log('hi')
-
 // signin과 register는 post요청(CRUD의 create)
 app.get('/', (req, res) => {res.send('it is working')} )
 
-app.post('/signin', (req, res) => { signIn.signinAuthentication(db, bcrypt) })
+app.post('/signin', (req, res) => { signIn.signinAuthentication(db, bcrypt, req, res) })
 
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
     
@@ -45,6 +43,8 @@ app.post('/profile/:id', (req, res) => { profile.handleProfileUpdate(req, res, d
 app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 
 app.post('/submit', (req, res) => { image.handleApi(req, res) })
+
+
 
 app.listen(process.env.PORT || 3000, () => {
     console.log(`it is running on port 3000`)

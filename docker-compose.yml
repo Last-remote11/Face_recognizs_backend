@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.8'
 
 services:
 
@@ -18,8 +18,10 @@ services:
       POSTGRES_DB: facerecognize-docker
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
+      REDIS_URL: redis://redis:6379
     links:
       - postgres
+      - redis
     ports:
       - "3000:3000"
     volumes: 
@@ -37,3 +39,10 @@ services:
       POSTGRES_DB: facerecognize-docker
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
+
+  #redis
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6378:6379"
