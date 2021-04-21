@@ -1,5 +1,5 @@
 const express = require('express');
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const app = express();
 const knex = require('knex');
@@ -12,6 +12,7 @@ const signIn = require('./controller/handleSignIn')
 const register = require('./controller/handleRegister')
 const image = require('./controller/handleImage')
 const profile = require('./controller/handleProfile')
+const auth = require('./controller/authorization')
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
 
@@ -36,13 +37,13 @@ app.post('/signin', (req, res) => { signIn.signinAuthentication(db, bcrypt, req,
 
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
     
-app.get('/profile/:id', (req, res) => { profile.handleProfile(req, res) })
+app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfile(req, res, db) })
 
-app.post('/profile/:id', (req, res) => { profile.handleProfileUpdate(req, res, db)})
+app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db)})
 
-app.put('/image', (req, res) => { image.handleImage(req, res, db) })
+app.put('/image', auth.requireAuth, (req, res) => { image.handleImage(req, res, db) })
 
-app.post('/submit', (req, res) => { image.handleApi(req, res) })
+app.post('/submit', auth.requireAuth, (req, res) => { image.handleApi(req, res) })
 
 
 

@@ -32,6 +32,7 @@ const getAuthTokenId = (req, res) => {
   const { authorization } = req.headers
   return redisClient.get(authorization, (err, reply) => {
     if (err || !reply) {
+      console.log(reply)
       return res.status(400).json('unauthorized')
     }
     return res.json({id: reply})
@@ -46,7 +47,7 @@ const signToken = (email) => {
 
 const setToken = (key, value) => {
   // 발급된 토큰을 redis에 저장
-  return Promise.resolve(redisClient.set(key, value))
+  return Promise.resolve(redisClient.set(key, value, 'EX', 10))
 }
 
 const createSessions = (user) => {
@@ -78,5 +79,6 @@ const signinAuthentication = (db, bcrypt, req, res) => {
 
 
 module.exports = {
-    signinAuthentication : signinAuthentication
+    signinAuthentication: signinAuthentication,
+    redisClient: redisClient
 }

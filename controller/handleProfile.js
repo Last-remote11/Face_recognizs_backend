@@ -1,6 +1,6 @@
 const { response } = require("express");
 
-const handleProfile = (req, res) => {
+const handleProfile = (req, res, db) => {
 
   const { id } = req.params;
 
